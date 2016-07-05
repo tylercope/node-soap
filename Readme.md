@@ -239,6 +239,23 @@ If `server.authenticate` is not defined then no authentication will take place.
   };
 ```
 
+### Asynchronous Server security example
+
+If `server.authenticate` takes two arguments, then the second argument is assumed to be a callback.
+
+``` javascript
+  server = soap.listen(...)
+  server.authenticate = function(security, callback) {
+	    	var token = security.UsernameToken;
+			MyAsyncThing.authenticate(token.Username, token.Password).done(function(authenticated) {
+				callback(authenticated);
+			}, function(err) {
+				console.log('Error authenticating: ', err);
+				callback(false);
+			});
+	  	};
+```
+
 ### Server connection authorization
 
 The `server.authorizeConnection` method is called prior to the soap service method.
